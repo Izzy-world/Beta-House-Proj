@@ -1,17 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/background-img.svg";
 import { useAuth } from "../context/AuthContext";
+import { FiChevronDown, FiLogOut } from "react-icons/fi";
+import backgroundImage from "../assets/background-img.svg";
+
+const UserDropdown = ({ user, onLogout }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center space-x-1 text-white hover:text-green-300 focus:outline-none"
+      >
+        <span>Hi, {user.firstName}</span>
+        <FiChevronDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+          <button
+            onClick={onLogout}
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+          >
+            <FiLogOut className="mr-2" />
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const HeaderSection = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate('/');
-    setIsMenuOpen(false);
+    setShowLogoutModal(false);
   };
 
   return (
@@ -25,47 +66,51 @@ const HeaderSection = () => {
         minHeight: '100vh'
       }}
     >
-      <div className="absolute inset-0 bg-opacity-40"></div>
       
-      <nav className="relative z-10">
+      <div className="absolute inset-0  bg-opacity-40"></div>
+      
+      {/* Navbar */}
+      <div className="relative z-10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <Link to="/" className="text-2xl font-bold text-white">
-              BH Betahouse
-            </Link>
+          <div className="flex items-center justify-between">
+            {/* Left - Logo */}
+            <div className="flex items-center gap-2">
+              <div className="bg-[#3D9970] w-10 h-10 rounded-full flex items-center justify-center font-bold text-[#FFFFFF]">
+                BH
+              </div>
+              <span className="text-xl font-poppins font-[500] text-white">
+                BetaHouse
+              </span>
+            </div>
 
-            <div className="hidden md:flex space-x-8 items-center">
-              <Link to="/" className="text-white hover:text-green-300 transition-colors">
-                Home
-              </Link>
-              <Link to="/properties" className="text-white hover:text-green-300">
-                Properties
-              </Link>
-              <Link to="/about" className="text-white hover:text-green-300">
-                About Us
-              </Link>
-              <Link to="/blog" className="text-white hover:text-green-300">
-                Blog
-              </Link>
-              <Link to="/contact" className="text-white hover:text-green-300">
-                Contact Us
-              </Link>
-              
+            {/* Center - Nav Links (Desktop) */}
+            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2">
+              <div className="flex space-x-8">
+                <Link to="/" className="text-white hover:text-green-300 transition-colors">
+                  Home
+                </Link>
+                <Link to="/properties" className="text-white hover:text-green-300">
+                  Properties
+                </Link>
+                <Link to="/about" className="text-white hover:text-green-300">
+                  About Us
+                </Link>
+                <Link to="/blog" className="text-white hover:text-green-300">
+                  Blog
+                </Link>
+                <Link to="/contact" className="text-white hover:text-green-300">
+                  Contact Us
+                </Link>
+              </div>
+            </div>
+
+            {/* Right - Auth Buttons (Desktop) */}
+            <div className="hidden md:flex items-center space-x-4">
               {user ? (
-                <div className="flex items-center space-x-4">
-                  <Link 
-                    to="/dashboard" 
-                    className="text-white hover:text-green-300"
-                  >
-                    Welcome, {user.firstName}
-                  </Link>
-                  <button 
-                    onClick={handleLogout}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-                  >
-                    Logout
-                  </button>
-                </div>
+                <UserDropdown 
+                  user={user} 
+                  onLogout={() => setShowLogoutModal(true)} 
+                />
               ) : (
                 <>
                   <Link to="/signup" className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
@@ -78,6 +123,7 @@ const HeaderSection = () => {
               )}
             </div>
 
+            {/* Mobile Menu Button */}
             <button 
               className="md:hidden text-white"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -94,6 +140,7 @@ const HeaderSection = () => {
             </button>
           </div>
 
+          {/* Mobile Menu Content */}
           {isMenuOpen && (
             <div className="md:hidden mt-4 bg-black bg-opacity-90 rounded-lg p-4">
               <div className="flex flex-col space-y-3">
@@ -114,23 +161,20 @@ const HeaderSection = () => {
                 </Link>
                 
                 {user ? (
-                  <div className="flex flex-col space-y-3 pt-2">
-                    <Link 
-                      to="/dashboard" 
-                      className="text-white text-center hover:text-green-400"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Welcome, {user.firstName}
-                    </Link>
+                  <div className="pt-4 border-t border-gray-700">
+                    <p className="text-white mb-2">Welcome, {user.firstName}</p>
                     <button 
-                      onClick={handleLogout}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                      onClick={() => {
+                        setShowLogoutModal(true);
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full bg-green-600 text-white px-4 py-2 rounded-lg"
                     >
                       Logout
                     </button>
                   </div>
                 ) : (
-                  <div className="flex space-x-3 pt-2">
+                  <div className="flex space-x-3 pt-4 border-t border-gray-700">
                     <Link 
                       to="/signup" 
                       className="flex-1 text-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
@@ -151,8 +195,9 @@ const HeaderSection = () => {
             </div>
           )}
         </div>
-      </nav>
+      </div>
 
+      {/* Hero Section */}
       <section className="relative z-10 pb-20 pt-32 md:pt-48">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center text-white pt-16 md:pt-24">
@@ -164,6 +209,7 @@ const HeaderSection = () => {
             </p>
           </div>
 
+          {/* Search Form */}
           <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-xl max-w-4xl mx-auto mt-0 md:mt-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
@@ -202,6 +248,30 @@ const HeaderSection = () => {
           </div>
         </div>
       </section>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Confirm Logout</h3>
+            <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

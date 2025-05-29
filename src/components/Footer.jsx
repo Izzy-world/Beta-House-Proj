@@ -10,11 +10,13 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 mb-12">
           {/* Brand Info */}
-          <div className="max-w-md">
-            <div className="flex items-center mb-4">
-              <img src={FooterLogo} alt="Betahouse Logo" className="h-8 mr-2" />
-              <h2 className="text-2xl font-Poppins text-[#FFFFFF]">Betahouse</h2>
-            </div>
+          <div className="max-w-md md:pl-15">
+            <div className="flex items-center gap-4 mb-5 ">
+        <div className="bg-[#FFFFFF] w-10 h-10 rounded-full flex items-center justify-center font-bold text-[#3D9970]">
+          BH
+        </div>
+        <span className=" text-xl font-poppins font-[500]">BetaHouse</span>
+      </div>
             <p className="mb-6 text-[#FFFFFF] text-opacity-90">
               Discover, rent, and find your ideal home hassle-free with Betahouse. 
               Take control of your rental journey today!
@@ -36,7 +38,7 @@ const Footer = () => {
           </div>
 
           {/* Links Section */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:pr-15 gap-15">
             {/* Quick Links */}
             <div className="space-y-4">
               <h3 className="text-xl font-Outfit text-[#FFFFFF]">Quick Links</h3>
@@ -78,12 +80,12 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Copyright - Left */}
-          <div className="text-sm mb-4 md:mb-0 text-opacity-90">
+          <div className="text-sm mb-4 md:mb-0 pl-15 text-opacity-90 ">
             Copyright © {new Date().getFullYear()} Betahouse | Designed by Michael fig
           </div>
           
           {/* Privacy Policy - Right */}
-          <div className="text-sm text-opacity-90">
+          <div className="text-sm text-opacity-90 md:pr-15">
             <a href="/privacy-policy" className="hover:underline">Privacy Policy</a>
             <span className="mx-2">|</span>
             <a href="/terms" className="hover:underline">Terms of Service</a>

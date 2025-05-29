@@ -123,7 +123,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="text-sm text-green-600 hover:text-green-800 focus:outline-none font-medium"
+                className="text-sm text-red-600 hover:text-red-800 focus:outline-none font-medium"
               >
                 Forgot password?
               </button>
@@ -173,8 +173,8 @@ const Login = () => {
           className="w-full h-full object-cover"
           style={{
             height: '100vh',
-            objectPosition: 'center top', // Changed to show top of image
-            marginTop: '20px' // Adjust this value to show more/less of the logo
+            objectPosition: 'center top', 
+            marginTop: '20px' 
             
           }}
         />
