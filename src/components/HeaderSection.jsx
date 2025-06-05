@@ -113,7 +113,7 @@ const HeaderSection = () => {
                 />
               ) : (
                 <>
-                  <Link to="/signup" className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                  <Link to="/signup" className="bg-opacity-90 border text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     Sign Up
                   </Link>
                   <Link to="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
@@ -162,7 +162,7 @@ const HeaderSection = () => {
                 
                 {user ? (
                   <div className="pt-4 border-t border-gray-700">
-                    <p className="text-white mb-2">Welcome, {user.firstName}</p>
+                    <p className="text-white mb-2">Hi, {user.firstName}</p>
                     <button 
                       onClick={() => {
                         setShowLogoutModal(true);
@@ -177,7 +177,7 @@ const HeaderSection = () => {
                   <div className="flex space-x-3 pt-4 border-t border-gray-700">
                     <Link 
                       to="/signup" 
-                      className="flex-1 text-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                      className="flex-1 text-center bg-opacity-90 border text-white px-4 py-2 rounded-lg hover:bg-green-600"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Sign Up
@@ -226,7 +226,7 @@ const HeaderSection = () => {
                 <input
                   type="text"
                   placeholder="eg, Duplex, Bedroom Flat"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-green-600"
                 />
               </div>
               
@@ -235,7 +235,7 @@ const HeaderSection = () => {
                 <input
                   type="text"
                   placeholder="eg, 3"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-green-600"
                 />
               </div>
               
@@ -251,7 +251,7 @@ const HeaderSection = () => {
 
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Confirm Logout</h3>
             <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
@@ -264,7 +264,7 @@ const HeaderSection = () => {
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 "
               >
                 Logout
               </button>
